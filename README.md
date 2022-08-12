@@ -3,6 +3,8 @@ Initial commit created from steps in https://www.section.io/engineering-educatio
 
 
 # to run
+Install required packages with `npm i`
+
 Build application with `npm run build`
 
 Run application with `npm start` or `nodemon`
