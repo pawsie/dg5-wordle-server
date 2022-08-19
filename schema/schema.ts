@@ -5,6 +5,8 @@ const schema = buildSchema(`
         allWords: [String]
         randomWord: String
         gameState: Int
+        gameWord: String
+        checkLetters(word: String!): [Int]
         wordOfTheDay(index: Int!, input: String!): [Int]
         books(limit: Int): [Book]
         book(id: ID!): Book
@@ -12,7 +14,7 @@ const schema = buildSchema(`
     }
     type Mutation {
         startGame: Boolean
-        endGame: Boolean
+        endGame: Boolean        
         addBook(title: String!, author: String!, description: String!): BookResponse
         updateBook(id: ID!, title: String, author: String, description: String): BookResponse
         deleteBook(id: ID!): BookResponse

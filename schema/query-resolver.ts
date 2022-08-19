@@ -12,6 +12,12 @@ const queryResolver = {
     gameState: async () => {
         return game.state;
     },
+    gameWord: async () => {
+        return game.word;
+    },
+    checkLetters: async ( {word}: {word: string} ) => {
+        return game.checkLetters(word);
+    },
     wordOfTheDay: async (args: any) => {
         let wordIndex = args.index;
         let wordInput = args.input;

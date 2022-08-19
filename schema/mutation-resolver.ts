@@ -5,8 +5,7 @@ import { game } from "../game";
 
 const mutation = {
     startGame: async ({}) => { 
-        game.start(); 
-        return true 
+        return game.start();        
     },
     endGame: async ({}) => { 
         game.end(); 
