@@ -1,17 +1,17 @@
 // GraphQL query resolver
 
-import {booksData} from './data'
-import https from 'https'
+import { game } from '../game';
 
-const query = {
+const queryResolver = {
     allWords: async () => {
-        return getAllWords();
+        return game.getAllWords();
     },
     randomWord: async () => {        
-        let words = await getAllWords();        
-        return words[Math.floor(Math.random()*words.length)];
+        return game.getRandomWord();
     },
-
+    gameState: async () => {
+        return game.state;
+    },
     wordOfTheDay: async (args: any) => {
         let wordIndex = args.index;
         let wordInput = args.input;
@@ -20,30 +20,13 @@ const query = {
         return [-1, 0, 0, 1, -1];
     },
 
-    books: async ({limit}: {limit: number}, context: any) => {
-        return limit ? booksData.slice(0, limit) : booksData;
-    },
-    book: async ({id}: {id: string}, context: any) => {
+    // books: async ({limit}: {limit: number}, context: any) => {
+    //     return limit ? booksData.slice(0, limit) : booksData;
+    // },
+    // book: async ({id}: {id: string}, context: any) => {
          
-        return booksData.find(book => book.id === id);
-    }
+    //     return booksData.find(book => book.id === id);
+    // }
 };
 
-async function getAllWords(){
-    const url = 'https://gist.githubusercontent.com/dracos/dd0668f281e685bad51479e5acaadb93/raw/ca9018b32e963292473841fb55fd5a62176769b5/valid-wordle-words.txt';
-        let promise = new Promise((resolve, reject) => {
-            let data: string | string[] = '';
-            https.get(url, res => {
-                res.on('data', chunk => { data += chunk })
-                res.on('end', () => {
-                    data = (data as string).split('\n');
-                    resolve(data);
-                })
-            })
-        });
-
-        let result = await promise; // wait until the promise resolves
-        return result as string[];
-}
-
-export default query;
+export default queryResolver;

@@ -4,12 +4,15 @@ const schema = buildSchema(`
     type Query {
         allWords: [String]
         randomWord: String
+        gameState: Int
         wordOfTheDay(index: Int!, input: String!): [Int]
         books(limit: Int): [Book]
         book(id: ID!): Book
         
     }
     type Mutation {
+        startGame: Boolean
+        endGame: Boolean
         addBook(title: String!, author: String!, description: String!): BookResponse
         updateBook(id: ID!, title: String, author: String, description: String): BookResponse
         deleteBook(id: ID!): BookResponse

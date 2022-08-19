@@ -1,7 +1,17 @@
 // GraphQL mutation resolver
 // import booksData from './data'
 
+import { game } from "../game";
+
 const mutation = {
+    startGame: async ({}) => { 
+        game.start(); 
+        return true 
+    },
+    endGame: async ({}) => { 
+        game.end(); 
+        return true 
+    },
     // addBook: async ({ title, author, description }, context) => {
     //     const book = { id: `${books.length+1}`, title, author, description }
     //     books.push(book)
