@@ -7,14 +7,15 @@ export enum GameStatus {
   };
 
 export enum LetterStates {    
-    BeforeCheck,
-    WrongLetter,
-    RightLetterWrongPlace,
-    RightLetterRightPlace,
-  };
+  BeforeCheck,
+  WrongLetter,
+  RightLetterWrongPlace,
+  RightLetterRightPlace,
+};
 
 export class CheckWordResult{
-  isWordInDictionary = false;
+  isWordInList = false;
+  isWordCorrect = false;
   letterStates: LetterStates[] = [];
 }
 
@@ -38,25 +39,32 @@ export class Game{
   }
   
   checkWord(wordToCheck: string): CheckWordResult{
-    
-    var result = new CheckWordResult();
-    result.isWordInDictionary = this.allWords.includes(wordToCheck.toLowerCase());  
 
-    var letters = wordToCheck.toString().toLowerCase().split('');
-    result.letterStates = new Array(5);
+    let wordResult = new CheckWordResult();
+    wordResult.isWordInList = this.allWords.includes(wordToCheck.toLowerCase());  
 
-    // needs to be improved for multiple letters not in the word
-    // e.g. "AAAAA" for "ADIEU" should give only 1 green for first A
-    for (let i = 0; i < 5; i++) {
-      if (this.correctLetters[i] == letters[i])
-        result.letterStates[i] = LetterStates.RightLetterRightPlace;
-      else if (this.correctLetters.includes(letters[i]))
-        result.letterStates[i] = LetterStates.RightLetterWrongPlace;
-      else
-        result.letterStates[i] = LetterStates.WrongLetter;
-    }   
+    if (wordResult.isWordInList){
+      var letters = wordToCheck.toString().toLowerCase().split('');
+      wordResult.letterStates = new Array(5);
 
-    return result;   
+      var correctCount = 0;
+      // needs to be improved for multiple letters not in the word
+      // e.g. "AAAAA" for "ADIEU" should give only 1 green for first A
+      for (let i = 0; i < 5; i++) {
+        if (this.correctLetters[i] == letters[i]){
+          wordResult.letterStates[i] = LetterStates.RightLetterRightPlace;
+          correctCount++;
+        }
+        else if (this.correctLetters.includes(letters[i]))
+          wordResult.letterStates[i] = LetterStates.RightLetterWrongPlace;
+        else
+          wordResult.letterStates[i] = LetterStates.WrongLetter;
+      }
+
+      wordResult.isWordCorrect = (correctCount == 5);
+    }
+
+    return wordResult;   
   }
 
   async getAllWords(){

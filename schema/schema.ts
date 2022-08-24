@@ -20,7 +20,8 @@ const schema = buildSchema(`
         deleteBook(id: ID!): BookResponse
     }
     type CheckWordResult {
-        isWordInDictionary: Boolean
+        isWordInList: Boolean
+        isWordCorrect: Boolean
         letterStates: [Int!]
     }
     type Book {
