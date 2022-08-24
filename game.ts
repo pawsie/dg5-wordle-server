@@ -7,19 +7,27 @@ export enum GameStatus {
   };
 
 export enum LetterStates {    
+    BeforeCheck,
     WrongLetter,
     RightLetterWrongPlace,
     RightLetterRightPlace,
   };
 
+export class CheckWordResult{
+  isWordInDictionary = false;
+  letterStates: LetterStates[] = [];
+}
+
 export class Game{
   state = GameStatus.BeforeStart;
   word: String = "";
   correctLetters: String[] = new Array(5);
+  allWords: String[] = new Array();
 
   async start(): Promise<Boolean>{
     this.state = GameStatus.InProgress;
     this.word = await this.getRandomWord();
+    this.allWords = await this.getAllWords();
     this.correctLetters = this.word.toLowerCase().split('');
     return this.correctLetters.length == 5;      
   }
@@ -29,23 +37,26 @@ export class Game{
     this.word = "";
   }
   
-  checkLetters(wordToCheck: string): LetterStates[]{
+  checkWord(wordToCheck: string): CheckWordResult{
     
+    var result = new CheckWordResult();
+    result.isWordInDictionary = this.allWords.includes(wordToCheck.toLowerCase());  
+
     var letters = wordToCheck.toString().toLowerCase().split('');
-    var answer: LetterStates[] = new Array(5);
+    result.letterStates = new Array(5);
 
     // needs to be improved for multiple letters not in the word
     // e.g. "AAAAA" for "ADIEU" should give only 1 green for first A
     for (let i = 0; i < 5; i++) {
       if (this.correctLetters[i] == letters[i])
-        answer[i] = LetterStates.RightLetterRightPlace;
+        result.letterStates[i] = LetterStates.RightLetterRightPlace;
       else if (this.correctLetters.includes(letters[i]))
-        answer[i] = LetterStates.RightLetterWrongPlace;
+        result.letterStates[i] = LetterStates.RightLetterWrongPlace;
       else
-        answer[i] = LetterStates.WrongLetter;
+        result.letterStates[i] = LetterStates.WrongLetter;
     }   
 
-    return answer;   
+    return result;   
   }
 
   async getAllWords(){

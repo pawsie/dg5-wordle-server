@@ -6,7 +6,7 @@ const schema = buildSchema(`
         randomWord: String
         gameState: Int
         gameWord: String
-        checkLetters(word: String!): [Int]
+        checkWord(word: String!): CheckWordResult
         wordOfTheDay(index: Int!, input: String!): [Int]
         books(limit: Int): [Book]
         book(id: ID!): Book
@@ -18,6 +18,10 @@ const schema = buildSchema(`
         addBook(title: String!, author: String!, description: String!): BookResponse
         updateBook(id: ID!, title: String, author: String, description: String): BookResponse
         deleteBook(id: ID!): BookResponse
+    }
+    type CheckWordResult {
+        isWordInDictionary: Boolean
+        letterStates: [Int!]
     }
     type Book {
         id: ID!
