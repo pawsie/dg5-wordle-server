@@ -26,6 +26,7 @@ const schema = buildSchema(`
     }
     type GameStatusResult {
         gameState: Int
+        gameWord: String
         success: Boolean
     }
     type Book {

@@ -21,8 +21,10 @@ export class CheckWordResult{
 
 export class GameStatusResult{
 
-  constructor(public gameState: GameStatus, 
-              public success: Boolean){}
+  constructor(public gameState: GameStatus,
+              public gameWord: String,
+              public success: Boolean
+              ){}
   
 }
 
@@ -37,7 +39,7 @@ export class Game{
     this.word = await this.getRandomWord();
     this.allWords = await this.getAllWords();
     this.correctLetters = this.word.toLowerCase().split('');
-    return new GameStatusResult(this.state, this.correctLetters.length == 5);      
+    return new GameStatusResult(this.state, this.word, this.correctLetters.length == 5);      
   }
 
   end(){
