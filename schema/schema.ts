@@ -13,7 +13,7 @@ const schema = buildSchema(`
         
     }
     type Mutation {
-        startGame: Boolean
+        startGame: GameStatusResult
         endGame: Boolean        
         addBook(title: String!, author: String!, description: String!): BookResponse
         updateBook(id: ID!, title: String, author: String, description: String): BookResponse
@@ -23,6 +23,10 @@ const schema = buildSchema(`
         isWordInList: Boolean
         isWordCorrect: Boolean
         letterStates: [Int!]
+    }
+    type GameStatusResult {
+        gameState: Int
+        success: Boolean
     }
     type Book {
         id: ID!

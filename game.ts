@@ -19,18 +19,25 @@ export class CheckWordResult{
   letterStates: LetterStates[] = [];
 }
 
+export class GameStatusResult{
+
+  constructor(public gameState: GameStatus, 
+              public success: Boolean){}
+  
+}
+
 export class Game{
   state = GameStatus.BeforeStart;
   word: String = "";
   correctLetters: String[] = new Array(5);
   allWords: String[] = new Array();
 
-  async start(): Promise<Boolean>{
+  async start(): Promise<GameStatusResult>{
     this.state = GameStatus.InProgress;
     this.word = await this.getRandomWord();
     this.allWords = await this.getAllWords();
     this.correctLetters = this.word.toLowerCase().split('');
-    return this.correctLetters.length == 5;      
+    return new GameStatusResult(this.state, this.correctLetters.length == 5);      
   }
 
   end(){
