@@ -17,6 +17,7 @@ export class CheckWordResult{
   isWordInList = false;
   isWordCorrect = false;
   letterStates: LetterStates[] = [];
+  // keyboardLetterStates: Map<string, LetterStates> = new Map();
 }
 
 export class GameStatusResult{
@@ -57,17 +58,49 @@ export class Game{
       wordResult.letterStates = new Array(5);
 
       var correctCount = 0;
-      // needs to be improved for multiple letters not in the word
-      // e.g. "AAAAA" for "ADIEU" should give only 1 green for first A
+      // for debugging
+      // letters = "baaaa".split('');
+      // this.correctLetters = "aaacc".split('');
+
+      var nonGreenAnswerOccurrences: Map<string, number> = new Map();
+      var nonGreenGuessIndex: Map<string, number> = new Map();
+
       for (let i = 0; i < 5; i++) {
         if (this.correctLetters[i] == letters[i]){
           wordResult.letterStates[i] = LetterStates.RightLetterRightPlace;
           correctCount++;
         }
-        else if (this.correctLetters.includes(letters[i]))
-          wordResult.letterStates[i] = LetterStates.RightLetterWrongPlace;
-        else
+        else if (this.correctLetters.includes(letters[i])){
+
+          // the first we encounter letter[i] that may be yellow,
+          // populate nonGreenAnswerOccurrences
+          if (!nonGreenAnswerOccurrences.has(letters[i])) {
+            for (let j = 0; j < 5; j++) {           
+            
+              // count number of occurrences of letter[i] in correctLetters that are not green
+              if (this.correctLetters[j] == letters[i] && this.correctLetters[j] != letters[j]){
+                this.incrementValueAtKey(nonGreenAnswerOccurrences, letters[i]);
+              }
+            }
+          }
+
+          // then update nonGreenGuessIndex for letter[i]
+          this.incrementValueAtKey(nonGreenGuessIndex, letters[i]);
+
+          if (nonGreenGuessIndex.get(letters[i]) == nonGreenAnswerOccurrences.get(letters[i])){
+            wordResult.letterStates[i] = LetterStates.RightLetterWrongPlace;
+            // if (!wordResult.keyboardLetterStates.has(letters[i]))
+              // wordResult.keyboardLetterStates.set(letters[i], LetterStates.RightLetterWrongPlace);
+          }
+          else{
+            wordResult.letterStates[i] = LetterStates.WrongLetter;
+            // wordResult.keyboardLetterStates.set(letters[i], LetterStates.WrongLetter);
+          }
+        }
+        else{
           wordResult.letterStates[i] = LetterStates.WrongLetter;
+          // wordResult.keyboardLetterStates.set(letters[i], LetterStates.WrongLetter);
+        }
       }
 
       wordResult.isWordCorrect = (correctCount == 5);
@@ -76,6 +109,13 @@ export class Game{
     return wordResult;   
   }
 
+  incrementValueAtKey(map: Map<string, number>, key: string){
+    map.set(key, map.has(key) ? map.get(key)! + 1 : 1);
+  }
+
+  checkUsedWords(letters: string[]){
+
+  }
   async getAllWords(){
     const url = 'https://gist.githubusercontent.com/dracos/dd0668f281e685bad51479e5acaadb93/raw/ca9018b32e963292473841fb55fd5a62176769b5/valid-wordle-words.txt';
         let promise = new Promise((resolve, reject) => {
