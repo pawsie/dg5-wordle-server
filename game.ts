@@ -59,8 +59,8 @@ export class Game{
 
       var correctCount = 0;
       // for debugging
-      // letters = "baaaa".split('');
-      // this.correctLetters = "aaacc".split('');
+      // letters = "adieu".split('');
+      // this.correctLetters = "darga".split('');
 
       var nonGreenAnswerOccurrences: Map<string, number> = new Map();
       var nonGreenGuessIndex: Map<string, number> = new Map();
@@ -87,7 +87,7 @@ export class Game{
           // then update nonGreenGuessIndex for letter[i]
           this.incrementValueAtKey(nonGreenGuessIndex, letters[i]);
 
-          if (nonGreenGuessIndex.get(letters[i]) == nonGreenAnswerOccurrences.get(letters[i])){
+          if (nonGreenGuessIndex.get(letters[i])! <= nonGreenAnswerOccurrences.get(letters[i])!){
             wordResult.letterStates[i] = LetterStates.RightLetterWrongPlace;
             // if (!wordResult.keyboardLetterStates.has(letters[i]))
               // wordResult.keyboardLetterStates.set(letters[i], LetterStates.RightLetterWrongPlace);
