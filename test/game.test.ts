@@ -41,6 +41,14 @@ describe("test getLetterStates", () => {
             LetterStates.WrongLetter,
             LetterStates.WrongLetter]);
     });
+    it("Guess 'acaaa' for answer 'aabba'", () => {
+        expect( game.getLetterStates("acaaa", "aabba")).toEqual([
+            LetterStates.RightLetterRightPlace,
+            LetterStates.WrongLetter,
+            LetterStates.RightLetterWrongPlace,
+            LetterStates.WrongLetter,
+            LetterStates.RightLetterRightPlace]);
+    });
     it("All wrong - guess 'uwxyz' for answer 'abcde'", () => {
         expect( game.getLetterStates("uwxyz", "abcde")).toEqual([
             LetterStates.WrongLetter,
