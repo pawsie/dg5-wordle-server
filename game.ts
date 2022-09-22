@@ -54,7 +54,7 @@ export class Game{
     wordResult.isWordInList = this.getIsWordInList(wordToCheck);
 
     if (wordResult.isWordInList){
-      
+
       wordResult.letterStates = this.getLetterStates(wordToCheck, this.word);
       // wordResult.letterStates[0] = LetterStates.RightLetterRightPlace;
 
@@ -70,12 +70,11 @@ export class Game{
 
   getLetterStates(guess: String, answer: String): LetterStates[]{
     
-    var letters = guess.toString().toLowerCase().split('');
     var letterStates = new Array(5);
 
     var correctCount = 0;      
-    letters = guess.split('');
-    this.correctLetters = answer.split('');
+    var letters = guess.toLowerCase().split('');
+    this.correctLetters = answer.toLowerCase().split('');
 
     var nonGreenAnswerOccurrences: Map<string, number> = new Map();
     var nonGreenGuessIndex: Map<string, number> = new Map();
