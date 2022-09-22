@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc --watch --project ./",
     "start": "nodemon dist/server.js",
-    "test": "jest"
+    "test": "jest",
+    "heroku-postbuild": "npm run build"
   },
   "keywords": [],
   "author": "",
