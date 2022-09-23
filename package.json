@@ -15,7 +15,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.17.13",
-    "express-graphql": "^0.9.0",
+    "express-graphql": "^0.12.0",
     "graphql": "^14.5.0"
   },
   "devDependencies": {
