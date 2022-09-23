@@ -39,8 +39,12 @@ export class Game{
     this.state = GameStatus.InProgress;
     this.word = await this.getRandomWord();
     this.allWords = await this.getAllWords();
-    this.correctLetters = this.word.toLowerCase().split('');
+    this.initialiseCorrectLetters();
     return new GameStatusResult(this.state, this.word, this.correctLetters.length == 5);      
+  }
+
+  initialiseCorrectLetters(word: String = this.word) {
+    this.correctLetters = word.toLowerCase().split('');
   }
 
   end(){
@@ -55,8 +59,7 @@ export class Game{
 
     if (wordResult.isWordInList){
 
-      wordResult.letterStates = this.getLetterStates(wordToCheck, this.word);
-      // wordResult.letterStates[0] = LetterStates.RightLetterRightPlace;
+      wordResult.letterStates = this.getLetterStates(wordToCheck);
 
       wordResult.isWordCorrect = wordResult.letterStates.every(i => i == LetterStates.RightLetterRightPlace);      
     }
@@ -68,57 +71,34 @@ export class Game{
     return this.allWords.includes(guess.toLowerCase());  
   }
 
-  getLetterStates(guess: String, answer: String): LetterStates[]{
-    
-    var letterStates = new Array(5);
+  getLetterStates(guess: String): LetterStates[]{
+    var letterStates: LetterStates[] = [];
+    var correctCount = 0;
+    var remainingLettersToCheck= this.correctLetters;
 
-    var correctCount = 0;      
-    var letters = guess.toLowerCase().split('');
-    this.correctLetters = answer.toLowerCase().split('');
-
-    var nonGreenAnswerOccurrences: Map<string, number> = new Map();
-    var nonGreenGuessIndex: Map<string, number> = new Map();
-
+    // Set green state first
     for (let i = 0; i < 5; i++) {
-      if (this.correctLetters[i] == letters[i]){
+      if (this.correctLetters[i] == guess[i]){
         letterStates[i] = LetterStates.RightLetterRightPlace;
         correctCount++;
-      }
-      else if (this.correctLetters.includes(letters[i])){
-
-        // the first we encounter letter[i] that may be yellow,
-        // populate nonGreenAnswerOccurrences
-        if (!nonGreenAnswerOccurrences.has(letters[i])) {
-          for (let j = 0; j < 5; j++) {           
-          
-            // count number of occurrences of letter[i] in correctLetters that are not green
-            if (this.correctLetters[j] == letters[i] && this.correctLetters[j] != letters[j]){
-              this.incrementValueAtKey(nonGreenAnswerOccurrences, letters[i]);
-            }
-          }
-        }
-
-        // then update nonGreenGuessIndex for letter[i]
-        this.incrementValueAtKey(nonGreenGuessIndex, letters[i]);
-
-        if (nonGreenGuessIndex.get(letters[i])! <= nonGreenAnswerOccurrences.get(letters[i])!){
-          letterStates[i] = LetterStates.RightLetterWrongPlace;
-          // if (!wordResult.keyboardLetterStates.has(letters[i]))
-            // wordResult.keyboardLetterStates.set(letters[i], LetterStates.RightLetterWrongPlace);
-        }
-        else{
-          letterStates[i] = LetterStates.WrongLetter;
-          // wordResult.keyboardLetterStates.set(letters[i], LetterStates.WrongLetter);
-        }
-      }
-      else{
-        letterStates[i] = LetterStates.WrongLetter;
-        // wordResult.keyboardLetterStates.set(letters[i], LetterStates.WrongLetter);
+        delete remainingLettersToCheck[i];
       }
     }
 
-    return letterStates; 
-    // isWordCorrect = (correctCount == 5);
+    if (correctCount < 5) {
+      // Populate other states for word result
+      for (let i = 0; i < 5; i++) {
+        if (letterStates[i] == LetterStates.RightLetterRightPlace) continue;
+        const foundIndex = remainingLettersToCheck.findIndex((remainingLetter) => remainingLetter == guess[i]);
+        if (foundIndex !== -1) {
+          letterStates[i] = LetterStates.RightLetterWrongPlace;
+          delete remainingLettersToCheck[foundIndex];
+        } else {
+          letterStates[i] = LetterStates.WrongLetter;
+        }
+      }
+    }
+    return letterStates;
   }
 
 

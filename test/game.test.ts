@@ -2,7 +2,8 @@ import { game, LetterStates } from "../game";
 
 describe("test getLetterStates", () => {
     it("All green - guess 'aaaaa' for answer 'aaaaa'", () => {
-        expect( game.getLetterStates("aaaaa", "aaaaa")).toEqual([
+        game.initialiseCorrectLetters("aaaaa");
+        expect( game.getLetterStates("aaaaa")).toEqual([
             LetterStates.RightLetterRightPlace,
             LetterStates.RightLetterRightPlace,
             LetterStates.RightLetterRightPlace,
@@ -10,7 +11,8 @@ describe("test getLetterStates", () => {
             LetterStates.RightLetterRightPlace]);
     });
     it("All green - guess 'uwxyz' for answer 'uwxyz'", () => {
-        expect( game.getLetterStates("uwxyz", "uwxyz")).toEqual([
+        game.initialiseCorrectLetters("uwxyz");
+        expect( game.getLetterStates("uwxyz")).toEqual([
             LetterStates.RightLetterRightPlace,
             LetterStates.RightLetterRightPlace,
             LetterStates.RightLetterRightPlace,
@@ -18,7 +20,8 @@ describe("test getLetterStates", () => {
             LetterStates.RightLetterRightPlace]);
     });
     it("All yellow - guess 'uwxyz' for answer 'zuwxy'", () => {
-        expect( game.getLetterStates("uwxyz", "zuwxy")).toEqual([
+        game.initialiseCorrectLetters("zuwxy");
+        expect( game.getLetterStates("uwxyz")).toEqual([
             LetterStates.RightLetterWrongPlace,
             LetterStates.RightLetterWrongPlace,
             LetterStates.RightLetterWrongPlace,
@@ -26,7 +29,8 @@ describe("test getLetterStates", () => {
             LetterStates.RightLetterWrongPlace]);
     });
     it("Less non green occurrences in guess 'aabbb' than answer 'acaaa'", () => {
-        expect( game.getLetterStates("aabbb", "acaaa")).toEqual([
+        game.initialiseCorrectLetters("acaaa");
+        expect( game.getLetterStates("aabbb")).toEqual([
             LetterStates.RightLetterRightPlace,
             LetterStates.RightLetterWrongPlace,
             LetterStates.WrongLetter,
@@ -34,7 +38,8 @@ describe("test getLetterStates", () => {
             LetterStates.WrongLetter]);
     });
     it("More non green occurrences in guess 'abaaa' than answer 'aaccc'", () => {
-        expect( game.getLetterStates("abaaa", "aaccc")).toEqual([
+        game.initialiseCorrectLetters("aaccc");
+        expect( game.getLetterStates("abaaa")).toEqual([
             LetterStates.RightLetterRightPlace,
             LetterStates.WrongLetter,
             LetterStates.RightLetterWrongPlace,
@@ -42,7 +47,8 @@ describe("test getLetterStates", () => {
             LetterStates.WrongLetter]);
     });
     it("Guess 'acaaa' for answer 'aabba'", () => {
-        expect( game.getLetterStates("acaaa", "aabba")).toEqual([
+        game.initialiseCorrectLetters("aabba");
+        expect( game.getLetterStates("acaaa")).toEqual([
             LetterStates.RightLetterRightPlace,
             LetterStates.WrongLetter,
             LetterStates.RightLetterWrongPlace,
@@ -50,7 +56,8 @@ describe("test getLetterStates", () => {
             LetterStates.RightLetterRightPlace]);
     });
     it("All wrong - guess 'uwxyz' for answer 'abcde'", () => {
-        expect( game.getLetterStates("uwxyz", "abcde")).toEqual([
+        game.initialiseCorrectLetters("abcde");
+        expect( game.getLetterStates("uwxyz")).toEqual([
             LetterStates.WrongLetter,
             LetterStates.WrongLetter,
             LetterStates.WrongLetter,
@@ -58,7 +65,8 @@ describe("test getLetterStates", () => {
             LetterStates.WrongLetter]);
     });
     it("Guess 'adieu' for answer 'darga'", () => {
-        expect( game.getLetterStates("adieu", "darga")).toEqual([
+        game.initialiseCorrectLetters("darga");
+        expect( game.getLetterStates("adieu")).toEqual([
             LetterStates.RightLetterWrongPlace,
             LetterStates.RightLetterWrongPlace,
             LetterStates.WrongLetter,
